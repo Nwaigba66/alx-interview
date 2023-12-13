@@ -1,4 +1,15 @@
+#!/usr/bin/python3
+"""This module define a minimum operations
+"""
 def minOperations(n):
+    """An algorithm that check a single character in a text file
+
+    Arguments:
+    =========
+    file (list of file): represent a single text file
+
+    Returns (interger): True if n is impossible to achieve
+    """
     if n == 1:
         return 0
 
