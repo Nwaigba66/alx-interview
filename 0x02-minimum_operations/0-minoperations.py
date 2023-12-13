@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module define a minimum operations
+"""Main File for testing
 """
 def minOperations(n):
     """An algorithm that check a single character in a text file
