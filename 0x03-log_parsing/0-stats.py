@@ -2,53 +2,37 @@
 """This module define a script that parses log read from standard input
 """
 import sys
-import signal
+import re
+from collections import defaultdict
 
-# Initialize variables
-total_size = 0
-status_code_count = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-lines_processed = 0
+pattn = r"[0-9.]+ - \[.*?\] \".*?\" (?P<st>[0-9]{3}) (?P<sz>[0-9]+)"
+content = defaultdict(lambda: 0)
+codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
 
-# Function to handle keyboard interruption (CTRL + C)
-def signal_handler(sig, frame):
-    print_stats()
-    sys.exit(0)
 
-# Function to print statistics
-def print_stats():
-    print(f"Total file size: File size: {total_size}")
-    for code in sorted(status_code_count):
-        if status_code_count[code] > 0:
-            print(f"{code}: {status_code_count[code]}")
+def process_log(content=content):
+    print("File size: {}".format(content["sz"]))
+    rem = dict(content)
+    del rem["sz"]
+    for key in sorted(list(rem.keys())):
+        if key in codes:
+            print("{}: {}".format(key, rem[key]))
+    sys.stdout.flush()
 
-# Register the signal handler for CTRL + C
-signal.signal(signal.SIGINT, signal_handler)
 
+count = 0
 try:
-    # Read input lines from stdin
     for line in sys.stdin:
-        # Split the line into components
-        parts = line.split()
+        if count == 10:
+            process_log(content)
+            count = 0
 
-        # Check if the line follows the specified format
-        if len(parts) >= 7 and parts[5].isdigit():
-            ip_address, date, status_code, file_size = parts[0], parts[3][1:], int(parts[6]), int(parts[9])
+        result = re.search(pattn, line)
 
-            # Update total file size
-            total_size += file_size
-
-            # Update status code count
-            if status_code in status_code_count:
-                status_code_count[status_code] += 1
-
-            # Increment the lines processed counter
-            lines_processed += 1
-
-            # Print statistics after every 10 lines
-            if lines_processed % 10 == 0:
-                print_stats()
-
-except KeyboardInterrupt:
-    # Handle keyboard interruption
-    print_stats()
-
+        if result:
+            result = result.groupdict()
+            content["sz"] += int(result.get("sz"))
+            content[result.get("st")] += 1
+            count += 1
+finally:
+    process_log(content)
