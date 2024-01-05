@@ -1,5 +1,5 @@
 def validUTF8(data):
-    # Helper function to check if a given byte is a valid start of a UTF-8 character
+    # Helper function to check if a given byte is a valid start
     def is_start_of_utf8(byte):
         return (byte & 0b10000000) == 0b00000000
 
