@@ -2,7 +2,6 @@
 """This Module defines the isWinner and other helper functions
 """
 
-
 def is_prime(num):
     if num < 2:
         return False
@@ -18,12 +17,12 @@ def isWinner(x, nums):
             # If n is 1 or even, Maria wins directly
             continue
         ben_wins += 1
-
+    
     # Determine the winner based on who won the most rounds
     if ben_wins > x // 2:
         return "Ben"
     elif ben_wins < x // 2:
         return "Maria"
     else:
-        return None
+        return "Ben"  # If equal wins, declare Ben as the winner
 
