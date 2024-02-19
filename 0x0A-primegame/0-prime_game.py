@@ -2,6 +2,10 @@
 """This Module defines the isWinner and other helper functions
 """
 
+#!/usr/bin/python3
+"""This kodule define the isWinner amd other helper functions
+"""
+
 
 def isWinner(x, nums):
     """Define the Prime game
@@ -37,5 +41,4 @@ def isWinner(x, nums):
     elif ben_wins > maria_wins:
         return "Ben"
     else:
-        return "Ben"  # If equal wins, declare Ben as the winner
-
+        return None
