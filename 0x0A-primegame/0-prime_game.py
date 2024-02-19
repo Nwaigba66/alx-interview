@@ -38,3 +38,27 @@ def isWinner(x, nums):
         return "Ben"
     else:
         return "Ben"  # If equal wins, declare Ben as the winner
+
+    def isWinner(x, nums):
+    def is_prime(n):
+        if n < 2:
+            return False
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
+
+    maria_wins = 0
+    ben_wins = 0
+
+    for n in nums:
+        if is_prime(n):
+            if n % 2 == 0:
+                maria_wins += 1
+            else:
+                ben_wins += 1
+
+    if maria_wins > ben_wins:
+        return "Maria"
+    else:
+        return "Ben"
