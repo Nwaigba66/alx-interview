@@ -1,40 +1,45 @@
 #!/usr/bin/python3
-"""This kodule define the isWinner amd other helper functions
+"""This Module defines the isWinner and other helper functions
 """
 
 
-def isWinner(x, nums):
-    """Define the Prime game
-    """
-
-    def sieve_of_eratosthenes(n):
-        primes = [True] * (n + 1)
-        primes[0] = primes[1] = False
-        for i in range(2, int(n ** 0.5) + 1):
-            if primes[i]:
-                for j in range(i * i, n + 1, i):
-                    primes[j] = False
-        return [i for i in range(n + 1) if primes[i]]
-
-    def can_win(n):
-        primes = sieve_of_eratosthenes(n)
-        if n in primes:
-            return True
+def is_prime(num):
+    if num <= 1:
         return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
 
+def next_prime(start):
+    num = start + 1
+    while not is_prime(num):
+        num += 1
+    return num
+
+def isWinner(x, nums):
     maria_wins = 0
-    ben_wins = 0
-
     for n in nums:
-        if can_win(n):
-            if n % 2 == 0:
-                maria_wins += 1
-            else:
-                ben_wins += 1
+        # If n is even, Maria wins directly
+        if n % 2 == 0:
+            maria_wins += 1
+            continue
+        # If n is 1, Ben wins directly
+        if n == 1:
+            continue
+        # Starting from 3, each player picks a prime number until no prime number is left
+        prime = 3
+        while n > 0:
+            n -= prime
+            prime = next_prime(prime)
+        # The player who couldn't pick a prime number loses
+        if n == 0:
+            maria_wins += 1
 
-    if maria_wins > ben_wins:
+    # Determine the winner based on who won the most rounds
+    if maria_wins > x // 2:
         return "Maria"
-    elif ben_wins > maria_wins:
+    elif maria_wins < x // 2:
         return "Ben"
     else:
         return None
