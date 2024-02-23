@@ -1,40 +1,51 @@
 #!/usr/bin/python3
-"""This kodule define the isWinner amd other helper functions
+""" prime game
+  x: number of rounds
+  A: array of n integers
 """
-
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
 
 def isWinner(x, nums):
-    """Define the Prime game
-    """
+    ben = 0
+    maria = 0
+    remaining = nums.copy()
+    prime = True
 
-    def sieve_of_eratosthenes(n):
-        primes = [True] * (n + 1)
-        primes[0] = primes[1] = False
-        for i in range(2, int(n ** 0.5) + 1):
-            if primes[i]:
-                for j in range(i * i, n + 1, i):
-                    primes[j] = False
-        return [i for i in range(n + 1) if primes[i]]
-
-    def can_win(n):
-        primes = sieve_of_eratosthenes(n)
-        if n in primes:
-            return True
-        return False
-
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        if can_win(n):
-            if n % 2 == 0:
-                maria_wins += 1
+    for _ in range(x):
+        for _ in range(len(remaining)):
+            tempRemaining = list(filter(lambda value: value != 0, remaining))
+            if len(tempRemaining) <= 1:
+                if ben % 2 == 0:
+                    maria += 1
+                else:
+                    ben += 1
+                break
+            if ben % 2 == 0:
+                while prime:
+                  choice = int(input("Marias turn: "))
+                  prime = is_prime(choice)
             else:
-                ben_wins += 1
+                while prime:
+                  choice = int(input("Bens turn: "))
+                  prime = is_prime(choice)
 
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
-        return None
+            for i in range(len(remaining)):
+                if remaining[i] % choice == 0 and remaining[i] > 1:
+                    remaining[i] = 0
+
+        if maria > ben:
+            return "Maria"
+        else:
+            return "Ben"
