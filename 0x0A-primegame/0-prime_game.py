@@ -1,7 +1,15 @@
 #!/usr/bin/python3
+<<<<<<< HEAD
 """ prime game
   x: number of rounds
   A: array of n integers
+=======
+"""This Module defines the isWinner and other helper functions
+"""
+
+#!/usr/bin/python3
+"""This kodule define the isWinner amd other helper functions
+>>>>>>> 361e612cb84af45b9ce5c635a06f59cb2f71c30d
 """
 def is_prime(n):
     if n <= 1:
