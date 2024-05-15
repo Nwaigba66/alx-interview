@@ -1,28 +1,26 @@
 #!/usr/bin/python3
-"""Prime game module.
+"""This module defines the island_perimeter function
 """
 
 
-def isWinner(x, nums):
-    """Determines the winner of a prime game session with `x` rounds.
+def island_perimeter(grid):
+    """Calculatesthe perimeter of the island in grid
     """
-    if x < 1 or not nums:
-        return None
-    marias_wins, bens_wins = 0, 0
-    # generate primes with a limit of the maximum number in nums
-    n = max(nums)
-    primes = [True for _ in range(1, n + 1, 1)]
-    primes[0] = False
-    for i, is_prime in enumerate(primes, 1):
-        if i == 1 or not is_prime:
-            continue
-        for j in range(i + i, n + 1, i):
-            primes[j - 1] = False
-    # filter the number of primes less than n in nums for each round
-    for _, n in zip(range(x), nums):
-        primes_count = len(list(filter(lambda x: x, primes[0: n])))
-        bens_wins += primes_count % 2 == 0
-        marias_wins += primes_count % 2 == 1
-    if marias_wins == bens_wins:
-        return None
-    return 'Maria' if marias_wins > bens_wins else 'Ben'
+    grid_sides = {}
+    rows = len(grid)
+    cols = len(grid[0])
+
+    for row in range(rows):
+        for col in range(cols):
+            is_land = grid[row][col]
+            if is_land:
+                for j, i in (
+                  (row-1, col), (row+1, col),
+                  (row, col-1), (row, col+1)):
+                    key = f"{j}-{i}"
+                    if key in grid_sides:
+                        grid_sides[key] += 1
+                    else:
+                        grid_sides[key] = 1
+
+    return sum((num for num in grid_sides.values() if num == 1))
